@@ -7,6 +7,7 @@ import(
     "io"
     "io/ioutil"
     "os"
+    "time"
     "strings"
 )
 
@@ -36,9 +37,10 @@ func main() {
     reader := bufio.NewReader(os.Stdin)
     var correct int
     questions, answers := read_csv(*csv_file)
-    timer := time.NewTimer(time.Second*time_limit)
+    //timer := time.NewTimer(time.Duration(*time_limit)*time.Second)
     fmt.Print("Press Enter to start...")
-    _, _ := reader.ReadString('\n')
+    fmt.Scanln()
+    //<-timer.C
     go func() {
         for i := range questions {
             fmt.Print(questions[i],":")
@@ -47,6 +49,7 @@ func main() {
                 correct ++;
             }
         }
-    }
-    fmt.Printf("%d/%d\n", correct, len(questions))
+    }()
+    time.Sleep(time.Duration(*time_limit))
+    fmt.Printf("\n%d/%d\n", correct, len(questions))
 }
