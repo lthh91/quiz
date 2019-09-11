@@ -9,6 +9,7 @@ import(
     "os"
     "time"
     "strings"
+    "sync/atomic"
 )
 
 
@@ -35,20 +36,25 @@ func main() {
     var time_limit = flag.Int("time_limit", 30, "Time allowed")
     flag.Parse()
     reader := bufio.NewReader(os.Stdin)
-    var correct int
+    var correct int32
     questions, answers := read_csv(*csv_file)
-    //timer := time.NewTimer(time.Duration(*time_limit)*time.Second)
     fmt.Print("Press Enter to start...")
     fmt.Scanln()
+    done := make(chan bool)
     go func() {
         for i := range questions {
             fmt.Print(questions[i],":")
             answer, _ := reader.ReadString('\n')
-            if strings.Compare(answer, answers[i]) == 0 {
-                correct ++;
+            if strings.Compare(strings.TrimSpace(answer), strings.TrimSpace(answers[i])) == 0 {
+                atomic.AddInt32(&correct, 1)
             }
         }
+        done <- true
     }()
-    <-time.After(time.Second * time.Duration(*time_limit))
-    fmt.Printf("\n%d/%d\n", correct, len(questions))
+    go func() {
+        time.Sleep(time.Second * time.Duration(*time_limit))
+        done <- true
+    }()
+    <- done
+    fmt.Printf("\nFinished. Your score is %d/%d\n", correct, len(questions))
 }
