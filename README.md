@@ -4,6 +4,7 @@ This is my attempt to solve the Golang exercise 1 (details below). My solution i
 
 - `csv_file`: The address of the csv file where data about questions and answers are located. Default `Problems.csv`.
 - `time_limit`: Time limit in seconds for the whole game. Default is `30`.
+- `shuffle`: If it's visible, then the questions will be shuffled, otherwise they follow the order in the csv file.
 
 Below is the explanation of the challenge from the original repo:
 
