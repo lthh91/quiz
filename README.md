@@ -1,3 +1,12 @@
+I'm currently very new to `Golang`, but I find it a powerful and interesting language. That's why I decided to take part in the Golang challenge from `https://gophercises.com`
+
+This is my attempt to solve the Golang exercise 1 (details below). My solution is in the file `main.go` and can be run with `go run main.go`. Currently, the following flags can be customized:
+
+- `csv_file`: The address of the csv file where data about questions and answers are located. Default `Problems.csv`.
+- `time_limit`: Time limit in seconds for the whole game. Default is `30`.
+
+Below is the explanation of the challenge from the original repo:
+
 # Exercise #1: Quiz Game
 
 [![exercise status: released](https://img.shields.io/badge/exercise%20status-released-green.svg?style=for-the-badge)](https://gophercises.com/exercises/quiz)
