@@ -40,7 +40,6 @@ func main() {
     //timer := time.NewTimer(time.Duration(*time_limit)*time.Second)
     fmt.Print("Press Enter to start...")
     fmt.Scanln()
-    //<-timer.C
     go func() {
         for i := range questions {
             fmt.Print(questions[i],":")
@@ -50,6 +49,6 @@ func main() {
             }
         }
     }()
-    time.Sleep(time.Duration(*time_limit))
+    <-time.After(time.Second * time.Duration(*time_limit))
     fmt.Printf("\n%d/%d\n", correct, len(questions))
 }
