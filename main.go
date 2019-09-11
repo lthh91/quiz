@@ -37,21 +37,20 @@ func main() {
     var time_limit = flag.Int("time_limit", 30, "Time allowed")
     var shuffle = flag.Bool("shuffle", false, "If the questions should be shuffled")
     flag.Parse()
-    var indices []int
     reader := bufio.NewReader(os.Stdin)
     var correct int32
     questions, answers := read_csv(*csv_file)
-    indices = rand.Perm(len(questions))
+    if *shuffle {
+        rand.Shuffle(len(questions), func(i, j int) {
+            questions[i], questions[j] = questions[j], questions[i]
+            answers[i], answers[j] = answers[j], answers[i]
+        })
+    }
     fmt.Print("Press Enter to start...")
     fmt.Scanln()
     done := make(chan bool)
     go func() {
-        var i int;
-        for idx, val := range indices {
-            i = val
-            if !*shuffle {
-                i = idx
-            }
+        for i := range questions {
             fmt.Print(questions[i],":")
             answer, _ := reader.ReadString('\n')
             if strings.Compare(strings.TrimSpace(answer), strings.TrimSpace(answers[i])) == 0 {
