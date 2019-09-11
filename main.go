@@ -10,6 +10,7 @@ import(
     "time"
     "strings"
     "sync/atomic"
+    "math/rand"
 )
 
 
@@ -34,15 +35,23 @@ func main() {
     var csv_file = flag.String("csv_file", "problems.csv",
                                "Path to the data csv file")
     var time_limit = flag.Int("time_limit", 30, "Time allowed")
+    var shuffle = flag.Bool("shuffle", false, "If the questions should be shuffled")
     flag.Parse()
+    var indices []int
     reader := bufio.NewReader(os.Stdin)
     var correct int32
     questions, answers := read_csv(*csv_file)
+    indices = rand.Perm(len(questions))
     fmt.Print("Press Enter to start...")
     fmt.Scanln()
     done := make(chan bool)
     go func() {
-        for i := range questions {
+        var i int;
+        for idx, val := range indices {
+            i = val
+            if !*shuffle {
+                i = idx
+            }
             fmt.Print(questions[i],":")
             answer, _ := reader.ReadString('\n')
             if strings.Compare(strings.TrimSpace(answer), strings.TrimSpace(answers[i])) == 0 {
